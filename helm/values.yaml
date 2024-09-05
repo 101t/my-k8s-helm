@@ -1,0 +1,55 @@
+# PostgreSQL configuration
+postgresql:
+  global:
+    postgresql:
+      auth:
+        username: "myuser"
+        database: "mydatabase"
+  primary:
+    persistence:
+      enabled: true
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+  externalAccess:
+    enabled: true
+    service:
+      type: LoadBalancer
+      port: 5432
+    autoDiscovery:
+      enabled: true
+  backup:
+    enabled: true
+    schedule: "0 2 * * *"
+    retention: 10
+    storage:
+      persistentVolumeClaim:
+        create: true
+        size: 1Gi
+
+# Redis configuration
+redis:
+  global:
+    redis:
+      password: ""
+  architecture: standalone
+  auth:
+    enabled: true
+    password: ""
+  persistence:
+    enabled: true
+  externalAccess:
+    enabled: true
+    service:
+      type: LoadBalancer
+      port: 6379
+
+# Simple app configuration
+simpleApp:
+  image:
+    repository: nginx
+    tag: latest
+  service:
+    type: ClusterIP
+    port: 80

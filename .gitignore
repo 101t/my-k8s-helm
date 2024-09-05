@@ -1,0 +1,10 @@
+# Terraform
+*.lock.hcl
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Helmchart
+Chart.lock
+*/charts/*.tgz
+

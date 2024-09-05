@@ -1,0 +1,16 @@
+{{- include "redis.fullname" . }}:
+{{- include "redis.tplvalues" . | nindent 2 }}
+
+# External Access
+{{- if .Values.redis.externalAccess.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "redis.fullname" . }}-external
+spec:
+  type: {{ .Values.redis.externalAccess.service.type }}
+  ports:
+    - port: {{ .Values.redis.externalAccess.service.port }}
+  selector:
+    app.kubernetes.io/name: {{ include "redis.name" . }}
+{{- end }}

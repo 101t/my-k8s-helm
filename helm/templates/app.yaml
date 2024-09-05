@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "simpleApp.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "simpleApp.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "simpleApp.name" . }}
+    spec:
+      containers:
+        - name: {{ include "simpleApp.name" . }}
+          image: {{ .Values.simpleApp.image.repository }}:{{ .Values.simpleApp.image.tag }}
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "simpleApp.fullname" . }}
+spec:
+  type: {{ .Values.simpleApp.service.type }}
+  ports:
+    - port: {{ .Values.simpleApp.service.port }}
+  selector:
+    app: {{ include "simpleApp.name" . }}
