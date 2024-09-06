@@ -1,9 +1,12 @@
 # PostgreSQL configuration
+
 postgresql:
+  name: my-postgresql
   global:
     postgresql:
       auth:
         username: "myuser"
+        password: "mypassword"
         database: "mydatabase"
   primary:
     persistence:
@@ -11,7 +14,7 @@ postgresql:
     resources:
       requests:
         memory: 256Mi
-        cpu: 100m
+        cpu: 500m
   externalAccess:
     enabled: true
     service:
@@ -29,7 +32,9 @@ postgresql:
         size: 1Gi
 
 # Redis configuration
+
 redis:
+  name: my-redis
   global:
     redis:
       password: ""
@@ -47,6 +52,7 @@ redis:
 
 # Simple app configuration
 simpleApp:
+  name: my-simple-app
   image:
     repository: nginx
     tag: latest

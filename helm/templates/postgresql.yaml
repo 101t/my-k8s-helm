@@ -1,18 +1,15 @@
-{{- include "postgresql.fullname" . }}:
-{{- include "postgresql.tplvalues" . | nindent 2 }}
-
 # External Access
 {{- if .Values.postgresql.externalAccess.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "postgresql.fullname" . }}-external
+  name: {{ .Values.postgresql.name }}-external
 spec:
   type: {{ .Values.postgresql.externalAccess.service.type }}
   ports:
     - port: {{ .Values.postgresql.externalAccess.service.port }}
   selector:
-    app.kubernetes.io/name: {{ include "postgresql.name" . }}
+    app.kubernetes.io/name: {{ .Values.postgresql.name }}
 {{- end }}
 
 # Backup Job
@@ -20,7 +17,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ include "postgresql.fullname" . }}-backup
+  name: {{ .Values.postgresql.name }}-backup
 spec:
   schedule: "{{ .Values.postgresql.backup.schedule }}"
   jobTemplate:
@@ -30,7 +27,7 @@ spec:
           containers:
           - name: backup
             image: bitnami/postgresql:latest
-            command: ["sh", "-c", "pg_dump -U {{ .Values.postgresql.global.postgresql.auth.username }} -h {{ include "postgresql.fullname" . }} {{ .Values.postgresql.global.postgresql.auth.database }} > /backups/backup.sql"]
+            command: ["sh", "-c", "pg_dump -U {{ .Values.postgresql.global.postgresql.auth.username }} -h {{ .Values.postgresql.name }} {{ .Values.postgresql.global.postgresql.auth.database }} > /backups/backup.sql"]
             env:
             - name: PGPASSWORD
               valueFrom:
@@ -44,5 +41,5 @@ spec:
           volumes:
           - name: backup-volume
             persistentVolumeClaim:
-              claimName: {{ include "postgresql.fullname" . }}-backup
+              claimName: {{ .Values.postgresql.name }}-backup
 {{- end }}
