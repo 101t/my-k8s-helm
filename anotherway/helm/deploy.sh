@@ -1,3 +1,5 @@
+#!/bin/bash
+
 CLUSTER_NAME="test-cluster"
 CONTEXT_NAME="kind-${CLUSTER_NAME}"
 
