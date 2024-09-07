@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.postgresql.name }}-pvc
+  labels:
+    app: {{ .Values.postgresql.name }}
+spec:
+  accessModes:
+    {{- toYaml .Values.postgresql.primary.persistence.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.postgresql.primary.persistence.size }}
+  storageClassName: {{ .Values.postgresql.primary.persistence.storageClass | default "standard" }}

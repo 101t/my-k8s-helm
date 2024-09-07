@@ -53,13 +53,21 @@ helm repo update helm/
 ```
 Update dependencies
 ```sh
-helm depedependency update helm/
+helm dependency update helm/
 ```
 To run databases cluster via `helm`
 ```sh
-helm install mymy-release helm/ \
+helm install my-release helm/ \
 --set postgresql.global.postgresql.auth.password=${POSTGRES_PASSWORD} \
 --set redis.auth.password=${REDIS_PASSWORD}
+```
+To check releases list
+```sh
+helm list
+```
+To delete release
+```sh
+helm delete my-release
 ```
 ## Running Tests
 To test PostgreSQL connection

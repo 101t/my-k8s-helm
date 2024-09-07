@@ -10,7 +10,13 @@ postgresql:
         password: ""
   primary:
     persistence:
-      enabled: true
+      enabled: true                       # Enable persistence
+      storageClass: "standard"            # Specify the storage class (or leave empty for default)
+      size: 10Gi                          # Size of the persistent storage
+      accessModes:
+        - ReadWriteOnce                   # Access mode for the volume
+      annotations: {}                     # Any additional annotations for the PVC
+      mountPath: /bitnami/postgresql      # Mount path where the PV will be attached
     resources:
       requests:
         memory: 256Mi
