@@ -41,10 +41,10 @@ function is_empty_or_null() {
 # Read default environment variables
 REDIS_HOST=${REDIS_HOST:-'127.0.0.1'}
 REDIS_PORT=${REDIS_PORT:-6379}
-REDIS_PASS=${REDIS_PASS:-''}
+REDIS_PASSWORD=${REDIS_PASSWORD:-''}
 
-if is_empty_or_null "$REDIS_PASS"; then
+if is_empty_or_null "$REDIS_PASSWORD"; then
   test_redis_connection_without_password $REDIS_HOST $REDIS_PORT
 else
-  test_redis_connection_with_password $REDIS_HOST $REDIS_PORT $REDIS_PASS
+  test_redis_connection_with_password $REDIS_HOST $REDIS_PORT $REDIS_PASSWORD
 fi

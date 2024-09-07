@@ -17,8 +17,6 @@ function test_postgresql_connection() {
     \q
 EOF
 
-  unset PGPASSWORD
-
   if [[ $? -eq 0 ]]; then
     echo "PostgreSQL connection successful"
   else
@@ -26,11 +24,11 @@ EOF
   fi
 }
 
-DB_HOST=${DB_HOST:-'127.0.0.1'}
-DB_PORT=${DB_PORT:-5432}
-DB_NAME=${DB_NAME:-'postgres'}
-DB_USER=${DB_USER:-'postgres'}
-DB_PASS=${DB_PASS:-'postgres'}
+DB_HOST=${POSTGRES_HOST:-'127.0.0.1'}
+DB_PORT=${POSTGRES_PORT:-5432}
+DB_NAME=${POSTGRES_NAME:-'postgres'}
+DB_USER=${POSTGRES_USERNAME:-'postgres'}
+DB_PASS=${POSTGRES_PASSWORD:-'postgres'}
 
 # Example usage:
 test_postgresql_connection $DB_HOST $DB_PORT $DB_NAME $DB_USER $DB_PASS
