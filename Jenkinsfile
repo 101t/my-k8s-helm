@@ -1,6 +1,4 @@
-/*
-Tarek Kalaji - 04.09.2024
-*/
+/* Tarek Kalaji - 04.09.2024 */
 
 pipeline {
     agent any
@@ -64,8 +62,8 @@ pipeline {
 
                 echo "Build helmchart"
                 
+                // Set up the PostgreSQL and Redis Helm chart with environment secrets and persistence enabled
                 sh '''
-                # Set up the PostgreSQL Helm chart with environment secrets and persistence enabled
                 helm repo add bitnami https://charts.bitnami.com/bitnami
                 helm repo update $HELM_DIR
                 helm dependency update $HELM_DIR

@@ -12,6 +12,11 @@ Install all required dependencies
 ```sh
 sudo bash ./scripts/install_dependencies.sh
 ```
+To set required environment variables
+```sh
+export POSTGRES_PASSWORD=<strong_password>
+export REDIS_PASSWORD=<strong_password>
+```
 
 ## Working on Terraform:
 To download terraform providers

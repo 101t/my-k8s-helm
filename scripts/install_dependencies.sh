@@ -15,13 +15,13 @@ runAsRoot() {
 runAsRoot apt-get update && runAsRoot apt-get -y upgrade
 
 # Install pre-required software
-runAsRoot apt-get install -y gnupg software-properties-common wget curl git
+runAsRoot apt-get install -y gnupg ca-certificates software-properties-common wget curl git
 
 # Install Terraform
 if ! terraform -v > /dev/null 2>&1; then
     echo "Installing Terraform"
     wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | \
-        sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+        runAsRoot tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
 
     gpg --no-default-keyring \
         --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
@@ -29,7 +29,7 @@ if ! terraform -v > /dev/null 2>&1; then
 
     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
         https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-        sudo tee /etc/apt/sources.list.d/hashicorp.list
+        runAsRoot tee /etc/apt/sources.list.d/hashicorp.list
 
     runAsRoot apt-get update && runAsRoot apt-get install -y terraform
     echo "Terraform installed successfully!"
@@ -43,6 +43,24 @@ if ! helm version > /dev/null 2>&1; then
     # Add Helm to your PATH (optional)
     runAsRoot mv /usr/local/bin/helm /usr/bin/helm
     echo "Helm installed successfully!"
+fi
+
+# Install Docker
+if ! docker -v > /dev/null 2>&1; then
+    echo "Installing Docker"
+    # Add Docker's official GPG key:
+    runAsRoot install -m 0755 -d /etc/apt/keyrings
+    runAsRoot curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    runAsRoot chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
+    runAsRoot tee /etc/apt/sources.list.d/docker.list > /dev/null
+    runAsRoot apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    # ensure current user can runs docker without root privileges
+    runAsRoot usermod -aG docker ${USER}
 fi
 
 # Install KubeCTL
@@ -83,4 +101,4 @@ if ! psql --version > /dev/null 2>&1; then
 fi
 
 # Clean apt scripts
-runAsRoot apt-get -y autoremove
+runAsRoot apt-get clean autoclean && runAsRoot apt-get autoremove -y && runAsRoot rm -rf /var/lib/{apt,dpkg,cache,log}/

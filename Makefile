@@ -1,3 +1,12 @@
+# Variables definitions
+# -----------------------------------------------------------------------------
+
+TIMEOUT ?= 60
+POSTGRES_PASSWORD ?= 'postgres'
+REDIS_PASSWORD ?= ''
+
+
+all: install_deps 
 
 install_deps:
 	sudo bash ./scripts/install_dependencies.sh
