@@ -47,7 +47,7 @@ pipeline {
                 echo 'Access the Kind Cluster in Terraform'
                 sh '''
                 export KUBECONFIG=$(terraform -chdir=$TERRAFORM_DIR output -raw kubeconfig)
-                # kubectl cluster-info --context $CLUSTER_NAME
+                # kubectl cluster-info --context kind-$CLUSTER_NAME
                 kind get clusters
                 '''.stripIndent()
             }
@@ -95,6 +95,8 @@ pipeline {
 
             // Optionally destroy the Kind cluster and any Terraform resources
             sh '''
+            export TERRAFORM_NAME_STATE=$(terraform -chdir=$TERRAFORM_DIR state list)
+            terraform -chdir=$TERRAFORM_DIR state rm $TERRAFORM_NAME_STATE
             kind delete cluster --name $CLUSTER_NAME
             terraform -chdir=$TERRAFORM_DIR destroy -auto-approve
             '''

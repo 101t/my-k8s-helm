@@ -33,7 +33,7 @@ terraform -chdir=terraform/ apply -auto-approve
 ```
 To access terraform cluster via `kubectl`
 ```sh
-export KUBECONFIG=$(terraform -chdir=$TERRAFORM_DIR output -raw kubeconfig)
+export KUBECONFIG=$(terraform -chdir=terraform/ output -raw kubeconfig)
 ```
 Checking cluster
 ```sh
